@@ -10,10 +10,8 @@ import (
 	"shodan-backend/models"
 )
 
-// InitDB initializes the PostgreSQL database connection and runs migrations.
+// database connection and initialization
 func InitDB() (*gorm.DB, error) {
-	// PostgreSQL connection string
-	// You can also use environment variables for better security
 	dsn := os.Getenv("DATABASE_URL")
 	if dsn == "" {
 		dsn = "postgresql://shodan_user:RR3VRkIbn3DF34A0PDFI5IeEu0GqjSUR@dpg-d49322je5dus73ch5ej0-a.oregon-postgres.render.com/shodan?sslmode=require"
@@ -24,7 +22,6 @@ func InitDB() (*gorm.DB, error) {
 		return nil, fmt.Errorf("failed to connect to PostgreSQL database: %w", err)
 	}
 
-	// Test the connection
 	sqlDB, err := db.DB()
 	if err != nil {
 		return nil, fmt.Errorf("failed to get database instance: %w", err)
@@ -34,7 +31,6 @@ func InitDB() (*gorm.DB, error) {
 		return nil, fmt.Errorf("failed to ping database: %w", err)
 	}
 
-	// Auto-migrate the Result model
 	if err := db.AutoMigrate(&models.Result{}); err != nil {
 		return nil, fmt.Errorf("auto migrate failed: %w", err)
 	}
@@ -43,7 +39,6 @@ func InitDB() (*gorm.DB, error) {
 	return db, nil
 }
 
-// CloseDB closes the database connection
 func CloseDB(db *gorm.DB) error {
 	sqlDB, err := db.DB()
 	if err != nil {
