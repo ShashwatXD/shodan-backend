@@ -4,18 +4,20 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/joho/godotenv"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 
 	"shodan-backend/models"
 )
 
-// database connection and initialization
+// InitDB establishes the database connection and runs migrations.
+// It expects DATABASE_URL to be set (optionally loaded from a local .env file).
 func InitDB() (*gorm.DB, error) {
+	// Load .env if present; ignore error if file doesn't exist
+	_ = godotenv.Load()
+
 	dsn := os.Getenv("DATABASE_URL")
-	if dsn == "" {
-		dsn = "postgresql://shodan_user:RR3VRkIbn3DF34A0PDFI5IeEu0GqjSUR@dpg-d49322je5dus73ch5ej0-a.oregon-postgres.render.com/shodan?sslmode=require"
-	}
 
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
