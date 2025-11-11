@@ -19,8 +19,6 @@ func InitDB() (*gorm.DB, error) {
 		dsn = "postgresql://shodan_user:RR3VRkIbn3DF34A0PDFI5IeEu0GqjSUR@dpg-d49322je5dus73ch5ej0-a.oregon-postgres.render.com/shodan?sslmode=require"
 	}
 
-	fmt.Printf("Attempting to connect to database with DSN: %s\n", dsn)
-
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
 		return nil, fmt.Errorf("failed to connect to PostgreSQL database: %w", err)

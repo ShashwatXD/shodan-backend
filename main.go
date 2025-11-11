@@ -21,13 +21,9 @@ func main() {
 	r.POST("/analyze/text", routes.AnalyzeTextHandler(db))
 	r.POST("/analyze/batch", routes.AnalyzeBatchHandler(db))
 	r.POST("/summarize", routes.SummarizeTextHandler(db))
-
-	// Optional history endpoint
 	r.GET("/history", func(c *gin.Context) {
 		var results []interface{}
-		// lightweight: query results table and return all rows
 		var rs []map[string]interface{}
-		// Use raw SQL to be defensive about package layout
 		if err := db.Raw("SELECT id, text, output, confidence, model, created_at FROM results").Scan(&rs).Error; err != nil {
 			c.JSON(500, gin.H{"error": "failed to fetch history", "details": err.Error()})
 			return
